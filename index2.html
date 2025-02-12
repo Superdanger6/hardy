@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybersecurity CTF</title>
+  <style>
+    /* =========== Global Styles =========== */
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: #3498db; /* Blue for base text */
+    }
+    /* =========== Dashboard (Main Page) Styles =========== */
+    header {
+      background: #001f3f; /* Dark blue */
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid #FF69B4; /* Pink accent */
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+      color: #FF69B4; /* Pink */
+      text-shadow: 0 0 5px #FF69B4, 0 0 10px #FF69B4;
+    }
+    nav {
+      background: #001f3f; /* Dark blue */
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
+      color: #FF69B4; /* Pink */
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-shadow: 0 0 5px #FF69B4;
+    }
+    main {
+      padding: 20px;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    section h2 {
+      color: #FF69B4; /* Pink */
+      text-shadow: 0 0 5px #FF69B4;
+      margin-bottom: 10px;
+    }
+    footer {
+      background: #001f3f; /* Dark blue */
+      color: #FF69B4; /* Pink */
+      text-align: center;
+      padding: 10px 0;
+      border-top: 2px solid #FF69B4;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    img {
+      margin: 10px 0;
+      border: 2px solid #FF69B4;
+    }
+    .quick-links a {
+      color: #FF69B4;
+      text-decoration: none;
+    }
+    .quick-links a:hover {
+      text-shadow: 0 0 5px #FF69B4;
+    }
+    .images img {
+      width: 150px;
+      height: auto;
+      filter: grayscale(100%);
+      display: none; /* Initially hide images for the carousel */
+    }
+    .images img:first-child {
+      display: block; /* Show first image initially */
+    }
+    dl dt {
+      color: #FF69B4; /* Pink */
+    }
+    dl dd {
+      color: #3498db; /* Blue */
+      margin-left: 20px;
+    }
+    hr {
+      border: none;
+      border-top: 2px solid #FF69B4;
+      margin: 20px 0;
+    }
+    pre {
+      background: #111;
+      padding: 10px;
+      border: 1px solid #FF69B4;
+      overflow-x: auto;
+    }
+    /* =========== Authentication (Login/Registration) Styles =========== */
+    .auth-section {
+      background: #001f3f; /* Dark blue */
+      padding: 20px;
+      margin: 20px auto;
+      width: 300px;
+      border: 2px solid #FF69B4;
+    }
+    .auth-section h2 {
+      color: #FF69B4;
+      text-shadow: 0 0 5px #FF69B4;
+    }
+    .auth-section input, 
+    .auth-section select {
+      width: 100%;
+      padding: 8px;
+      margin: 10px 0;
+      background: #000;
+      border: 1px solid #FF69B4;
+      color: #3498db;
+    }
+    .auth-section button {
+      background: #000;
+      color: #FF69B4;
+      border: 1px solid #FF69B4;
+      padding: 10px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .auth-section .error {
+      color: #FF1493; /* Deep pink for errors */
+      font-size: 0.8em;
+      display: block;
+    }
+    /* =========== Logout Button Styles =========== */
+    #logout-btn {
+      background: #000;
+      color: #FF69B4;
+      border: 1px solid #FF69B4;
+      padding: 10px;
+      cursor: pointer;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <!-- ================== Authentication Section ================== -->
+  <div id="auth-container">
+    <!-- Registration Form -->
+    <div id="registration-form" class="auth-section">
+      <h2>Register</h2>
+      <form id="regForm">
+        <input type="text" id="fullName" placeholder="Full Name" required>
+        <input type="text" id="regNum" placeholder="Registration Number (BCS-00-0000-0000)" required>
+        <select id="gender" required>
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="email" id="email" placeholder="Email" required>
+        <select id="region" required>
+          <option value="">Select Region</option>
+        </select>
+        <select id="district" required>
+          <option value="">Select District</option>
+        </select>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+        <button type="submit">Register</button>
+      </form>
+      <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+    </div>
+    <!-- Login Form -->
+    <div id="login-form" class="auth-section" style="display:none;">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+      <p>Don't have an account? <a href="#" id="show-register">Register</a></p>
+    </div>
+  </div>
+
+  <!-- ================== Dashboard (Main Page) ================== -->
+  <div id="dashboard" style="display:none;">
+    <header>
+      <h1>Cybersecurity CTF</h1>
+    </header>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about-ctf">About CTF</a>
+      <a href="#challenges">Challenges</a>
+      <a href="#rules">Rules</a>
+      <a href="#faq">FAQs</a>
+      <a href="#contact-us">Contact Us</a>
+    </nav>
+    <main>
+      <!-- Home Section -->
+      <section id="home">
+        <h2>Welcome</h2>
+        <p>
+          <strong>Test your skills</strong> in our <em>exciting</em> and <u>challenging</u> Capture the Flag competitions!
+          <br>
+          Join now and prove your cybersecurity expertise.
+        </p>
+        <div class="quick-links">
+          <a href="#challenges">View Challenges</a> |
+          <a href="#contact-us">Contact Us</a>
+        </div>
+      </section>
+      
+      <!-- About CTF Section -->
+      <section id="about-ctf">
+        <h2>About CTF</h2>
+        <p>Our Capture the Flag (CTF) competitions are designed for cybersecurity enthusiasts to test and hone their skills. Solve puzzles, discover vulnerabilities, and capture flags to climb the leaderboard!</p>
+      </section>
+      
+      <!-- Challenges Section -->
+      <section id="challenges">
+        <h2>Challenges</h2>
+        <ul>
+          <li>Web Exploitation</li>
+          <li>Cryptography</li>
+          <li>Reverse Engineering</li>
+          <li>Forensics</li>
+        </ul>
+      </section>
+      
+      <!-- Rules Section -->
+      <section id="rules">
+        <h2>Rules</h2>
+        <ul>
+          <li>No unauthorized hacking or illegal activities.</li>
+          <li>Respect all participants.</li>
+          <li>Do not share challenge solutions.</li>
+          <li>Have fun and learn!</li>
+        </ul>
+      </section>
+      
+      <!-- FAQ Section -->
+      <section id="faq">
+        <h2>FAQs</h2>
+        <dl>
+          <dt>What is a CTF?</dt>
+          <dd>A CTF is a cybersecurity competition where participants solve challenges to capture virtual flags.</dd>
+          <dt>Who can participate?</dt>
+          <dd>Anyone with an interest in cybersecurity—from beginners to experts!</dd>
+          <dt>How do I join?</dt>
+          <dd>Register using the form and then login to access challenges.</dd>
+        </dl>
+      </section>
+      
+      <!-- Contact Us Section -->
+      <section id="contact-us">
+        <h2>Contact Us</h2>
+        <p>
+          Email: <a href="mailto:ctf@cyberctf.com">ctf@cyberctf.com</a><br>
+          Encrypted Chat: <a href="https://example.com/chat">Start Chat</a>
+        </p>
+      </section>
+      
+      <!-- Gallery Section (with a simple carousel) -->
+      <section id="gallery">
+        <h2>Gallery</h2>
+        <div class="images">
+          <img src="ctf-challenge1.jpg" alt="CTF Challenge 1">
+          <img src="ctf-challenge2.jpg" alt="CTF Challenge 2">
+          <img src="ctf-challenge3.jpg" alt="CTF Challenge 3">
+          <a href="#challenges">
+            <img src="ctf-challenge4.jpg" alt="CTF Challenge 4">
+          </a>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2025 Cybersecurity CTF. All rights reserved.</p>
+    </footer>
+    <button id="logout-btn">Logout</button>
+  </div>
+
+  <!-- ================== jQuery & Scripts ================== -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      /* ----- Switch between Registration and Login ----- */
+      $("#show-login").click(function(e){
+        e.preventDefault();
+        $("#registration-form").hide();
+        $("#login-form").show();
+      });
+      $("#show-register").click(function(e){
+        e.preventDefault();
+        $("#login-form").hide();
+        $("#registration-form").show();
+      });
+      
+      /* ----- Region & District Dynamic Selection (Simulated AJAX) ----- */
+      var regionData = {
+        "Arusha": ["Arusha Urban", "Ngorongoro", "Longido", "Siha"],
+        "Dodoma": ["Dodoma Urban", "Chamwino", "Bahi", "Mpwapwa"],
+        "Dar es Salaam": ["Ilala", "Temeke", "Kinondoni", "Ubungo"]
+      };
+      // Populate the region dropdown
+      $.each(regionData, function(region, districts) {
+        $("#region").append($("<option></option>").attr("value", region).text(region));
+      });
+      // When the region changes, update the district dropdown
+      $("#region").change(function(){
+        var selectedRegion = $(this).val();
+        var districts = regionData[selectedRegion] || [];
+        $("#district").empty().append($("<option></option>").attr("value", "").text("Select District"));
+        $.each(districts, function(i, district){
+          $("#district").append($("<option></option>").attr("value", district).text(district));
+        });
+      });
+      
+      /* ----- Registration Form Validation ----- */
+      $("#regForm").submit(function(e){
+        e.preventDefault();
+        // Remove previous error messages
+        $(".error").remove();
+        var valid = true;
+        
+        var fullName = $("#fullName").val().trim();
+        if(fullName === ""){
+          $("#fullName").after("<span class='error'> Full name is required</span>");
+          valid = false;
+        }
+        
+        var regNum = $("#regNum").val().trim();
+        var regPattern = /^BCS-\d{2}-\d{4}-\d{4}$/;
+        if(!regPattern.test(regNum)){
+          $("#regNum").after("<span class='error'> Invalid registration number format (BCS-00-0000-0000)</span>");
+          valid = false;
+        }
+        
+        var gender = $("#gender").val();
+        if(gender === ""){
+          $("#gender").after("<span class='error'> Please select your gender</span>");
+          valid = false;
+        }
+        
+        var email = $("#email").val().trim();
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailPattern.test(email)){
+          $("#email").after("<span class='error'> Invalid email address</span>");
+          valid = false;
+        }
+        
+        var region = $("#region").val();
+        if(region === ""){
+          $("#region").after("<span class='error'> Please select a region</span>");
+          valid = false;
+        }
+        
+        var district = $("#district").val();
+        if(district === ""){
+          $("#district").after("<span class='error'> Please select a district</span>");
+          valid = false;
+        }
+        
+        var password = $("#password").val();
+        if(password.length < 6){
+          $("#password").after("<span class='error'> Password must be at least 6 characters long</span>");
+          valid = false;
+        }
+        
+        var confirmPassword = $("#confirmPassword").val();
+        if(password !== confirmPassword){
+          $("#confirmPassword").after("<span class='error'> Passwords do not match</span>");
+          valid = false;
+        }
+        
+        if(valid){
+          // Save user data (for demo purposes) in localStorage
+          var userData = {
+            fullName: fullName,
+            regNum: regNum,
+            gender: gender,
+            email: email,
+            region: region,
+            district: district,
+            password: password
+          };
+          localStorage.setItem("userData", JSON.stringify(userData));
+          alert("Registration successful! Please login.");
+          $("#registration-form").hide();
+          $("#login-form").show();
+        }
+      });
+      
+      /* ----- Login Form Validation ----- */
+      $("#loginForm").submit(function(e){
+        e.preventDefault();
+        $(".error").remove();
+        var email = $("#loginEmail").val().trim();
+        var password = $("#loginPassword").val();
+        var storedUser = localStorage.getItem("userData");
+        if(storedUser){
+          var userData = JSON.parse(storedUser);
+          if(email === userData.email && password === userData.password){
+            // Successful login
+            $("#auth-container").hide();
+            $("#dashboard").fadeIn();
+          } else {
+            $("#loginForm").after("<span class='error'> Invalid email or password</span>");
+          }
+        } else {
+          $("#loginForm").after("<span class='error'> No registered user found</span>");
+        }
+      });
+      
+      /* ----- Smooth Scrolling for Dashboard Navigation ----- */
+      $("nav a").click(function(e){
+        e.preventDefault();
+        var target = $(this).attr("href");
+        $("html, body").animate({
+          scrollTop: $(target).offset().top
+        }, 800);
+      });
+      
+      /* ----- Simple Carousel for Gallery Images ----- */
+      var currentIndex = 0;
+      var images = $(".images img");
+      function showImage(index){
+        images.hide();
+        $(images[index]).fadeIn();
+      }
+      if(images.length > 0){
+        showImage(currentIndex);
+        setInterval(function(){
+          currentIndex = (currentIndex + 1) % images.length;
+          showImage(currentIndex);
+        }, 3000);
+      }
+      
+      /* ----- Logout Button Functionality ----- */
+      $("#logout-btn").click(function(){
+        // (Optionally clear session data)
+        $("#dashboard").hide();
+        $("#auth-container").show();
+        $("#login-form").show();
+      });
+    });
+  </script>
+</body>
+</html>
