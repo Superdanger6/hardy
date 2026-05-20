@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BusTicket Pro - Bus Ticketing System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Authentication Pages Container -->
+    <div id="auth-container" class="container active">
+        <!-- Registration Page -->
+        <div id="registration-page" class="auth-page active">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1>🚌 BusTicket Pro</h1>
+                    <p>Create Your Account</p>
+                </div>
+                <form id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="reg-fullname">Full Name</label>
+                        <input type="text" id="reg-fullname" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email Address</label>
+                        <input type="email" id="reg-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-phone">Phone Number</label>
+                        <input type="tel" id="reg-phone" placeholder="Enter your phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" placeholder="Create a strong password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-confirm-password">Confirm Password</label>
+                        <input type="password" id="reg-confirm-password" placeholder="Confirm your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                </form>
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="#" onclick="toggleAuthPage()">Login here</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Page -->
+        <div id="login-page" class="auth-page">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1>🚌 BusTicket Pro</h1>
+                    <p>Welcome Back</p>
+                </div>
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                </form>
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="#" onclick="toggleAuthPage()">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Container -->
+    <div id="dashboard-container" class="container">
+        <!-- Navigation Header -->
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <h1>🚌 BusTicket Pro</h1>
+            </div>
+            <div class="navbar-menu">
+                <a href="#" class="nav-link active" onclick="showDashboard()">Dashboard</a>
+                <a href="#" class="nav-link" onclick="showBooking()">Book Ticket</a>
+                <a href="#" class="nav-link" onclick="showMyTickets()">My Tickets</a>
+                <div class="user-profile">
+                    <span id="user-name">User</span>
+                    <button class="btn btn-logout" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Overview Page -->
+            <div id="dashboard-page" class="page active">
+                <div class="dashboard-header">
+                    <h2>Welcome to Your Dashboard</h2>
+                    <p id="welcome-message">Hello, User!</p>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">🎫</div>
+                        <div class="stat-info">
+                            <h3 id="total-tickets">0</h3>
+                            <p>Total Bookings</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <h3 id="completed-trips">0</h3>
+                            <p>Completed Trips</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🚀</div>
+                        <div class="stat-info">
+                            <h3 id="upcoming-trips">0</h3>
+                            <p>Upcoming Trips</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-actions">
+                    <button class="action-btn" onclick="showBooking()">
+                        <span class="action-icon">🎫</span>
+                        <span class="action-text">Book New Ticket</span>
+                    </button>
+                    <button class="action-btn" onclick="showMyTickets()">
+                        <span class="action-icon">📋</span>
+                        <span class="action-text">View My Tickets</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Booking Page -->
+            <div id="booking-page" class="page">
+                <div class="page-header">
+                    <h2>Book Your Ticket</h2>
+                    <p>Search and select your preferred bus route</p>
+                </div>
+
+                <div class="booking-form-container">
+                    <form id="search-form" class="search-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="from-city">From</label>
+                                <select id="from-city" required>
+                                    <option value="">Select departure city</option>
+                                    <option value="New York">New York</option>
+                                    <option value="Los Angeles">Los Angeles</option>
+                                    <option value="Chicago">Chicago</option>
+                                    <option value="Houston">Houston</option>
+                                    <option value="Phoenix">Phoenix</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="to-city">To</label>
+                                <select id="to-city" required>
+                                    <option value="">Select destination city</option>
+                                    <option value="New York">New York</option>
+                                    <option value="Los Angeles">Los Angeles</option>
+                                    <option value="Chicago">Chicago</option>
+                                    <option value="Houston">Houston</option>
+                                    <option value="Phoenix">Phoenix</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="travel-date">Travel Date</label>
+                                <input type="date" id="travel-date" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Search Buses</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="bus-results" class="bus-results"></div>
+            </div>
+
+            <!-- Seat Selection Page -->
+            <div id="seat-selection-page" class="page">
+                <div class="page-header">
+                    <h2>Select Your Seats</h2>
+                    <p id="bus-details-text">Bus details</p>
+                </div>
+
+                <div class="seat-container">
+                    <div class="seat-legend">
+                        <div class="legend-item">
+                            <div class="seat available"></div>
+                            <span>Available</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="seat selected"></div>
+                            <span>Selected</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="seat booked"></div>
+                            <span>Booked</span>
+                        </div>
+                    </div>
+
+                    <div class="bus-layout">
+                        <div class="bus-window"></div>
+                        <div id="seats-grid" class="seats-grid"></div>
+                        <div class="bus-driver">🚌 Driver</div>
+                    </div>
+
+                    <div class="seat-info">
+                        <h3>Selected Seats:</h3>
+                        <p id="selected-seats-display">No seats selected</p>
+                        <p id="total-price">Total Price: $0.00</p>
+                    </div>
+
+                    <div class="seat-actions">
+                        <button class="btn btn-secondary" onclick="backToBooking()">Back</button>
+                        <button class="btn btn-primary" onclick="proceedToPayment()">Proceed to Payment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Page -->
+            <div id="payment-page" class="page">
+                <div class="page-header">
+                    <h2>Complete Your Payment</h2>
+                    <p>Secure payment for your bus tickets</p>
+                </div>
+
+                <div class="payment-container">
+                    <div class="payment-summary">
+                        <h3>Booking Summary</h3>
+                        <div class="summary-item">
+                            <span>Route:</span>
+                            <span id="payment-route">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Travel Date:</span>
+                            <span id="payment-date">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Seats:</span>
+                            <span id="payment-seats">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Price per Seat:</span>
+                            <span id="payment-per-seat">$0.00</span>
+                        </div>
+                        <div class="summary-divider"></div>
+                        <div class="summary-item total">
+                            <span>Total Amount:</span>
+                            <span id="payment-total">$0.00</span>
+                        </div>
+                    </div>
+
+                    <form id="payment-form" class="payment-form">
+                        <div class="form-group">
+                            <label for="card-name">Cardholder Name</label>
+                            <input type="text" id="card-name" placeholder="Full name on card" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="card-number">Card Number</label>
+                            <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="card-expiry">Expiry Date</label>
+                                <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="card-cvv">CVV</label>
+                                <input type="text" id="card-cvv" placeholder="123" maxlength="3" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block btn-large">Complete Payment</button>
+                    </form>
+
+                    <div class="payment-actions">
+                        <button class="btn btn-secondary" onclick="backToSeatSelection()">Back</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Tickets Page -->
+            <div id="my-tickets-page" class="page">
+                <div class="page-header">
+                    <h2>My Tickets</h2>
+                    <p>View and manage your booked tickets</p>
+                </div>
+
+                <div id="tickets-container" class="tickets-container"></div>
+            </div>
+
+            <!-- Confirmation Page -->
+            <div id="confirmation-page" class="page">
+                <div class="confirmation-card">
+                    <div class="confirmation-icon">✓</div>
+                    <h2>Booking Confirmed!</h2>
+                    <p>Your ticket has been successfully booked.</p>
+                    
+                    <div class="ticket-details">
+                        <div class="detail-row">
+                            <span>Ticket ID:</span>
+                            <span id="confirmation-ticket-id" class="ticket-id">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Route:</span>
+                            <span id="confirmation-route">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Travel Date:</span>
+                            <span id="confirmation-date">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Seats:</span>
+                            <span id="confirmation-seats">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Total Amount:</span>
+                            <span id="confirmation-amount">-</span>
+                        </div>
+                    </div>
+
+                    <p class="confirmation-message">A confirmation email has been sent to your registered email address.</p>
+
+                    <div class="confirmation-actions">
+                        <button class="btn btn-primary" onclick="backToDashboard()">Back to Dashboard</button>
+                        <button class="btn btn-secondary" onclick="bookAnotherTicket()">Book Another Ticket</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
